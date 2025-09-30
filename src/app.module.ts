@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConductoresModule } from './conductores/conductores.module';
-import { ConductoresController } from './conductores/conductores.controller';
-import { ConductoresService } from './conductores/conductores.service';
+import { ConductoresModule } from './infrastructure/modules/conductores.module';
+import { ConductoresController } from './infrastructure/controllers/conductores.controller';
+import { ConductoresService } from './services/conductores.service';
 
 @Module({
   imports: [ConductoresModule],
