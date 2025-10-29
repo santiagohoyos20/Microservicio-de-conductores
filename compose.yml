@@ -30,7 +30,7 @@ services:
       - ./:/usr/src/app   # carpeta de tu proyecto NestJS
       - /usr/src/app/node_modules
     ports:
-      - "3001:3000" # expose on 3001 to avoid colliding with other apps
+      - "50052:50052"
     depends_on:
       db:
         condition: service_healthy
