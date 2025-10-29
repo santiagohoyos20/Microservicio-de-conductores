@@ -1,0 +1,11 @@
+node_modules
+dist
+coverage
+.env
+.git
+generated
+**/node_modules
+npm-debug.log
+yarn-error.log
+Dockerfile
+docker-compose*.yml

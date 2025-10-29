@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16
+    container_name: conductores_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: conductores
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+    ports:
+      - "5433:5432" # host:container (avoid colliding with other postgres on 5432)
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d conductores"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    image: node:20
+    container_name: conductores_app
+    restart: unless-stopped
+    working_dir: /usr/src/app
+    env_file:
+      - .env
+    volumes:
+      - ./:/usr/src/app   # carpeta de tu proyecto NestJS
+      - /usr/src/app/node_modules
+    ports:
+      - "3001:3000" # expose on 3001 to avoid colliding with other apps
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      sh -c "
+        npm install &&
+        npx prisma generate &&
+        npx prisma migrate deploy &&
+        npx prisma db seed &&
+        npm run start:dev
+      "
+
+volumes:
+  db_data:
