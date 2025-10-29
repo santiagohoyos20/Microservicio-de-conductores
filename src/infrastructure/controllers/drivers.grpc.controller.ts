@@ -19,8 +19,10 @@ export class DriversGrpcController {
       email: data.email,
       nombre: data.name,
       apellido: data.lastname,
-      telefono: data.phone_number,
+      telefono: data.phoneNumber,
     };
+
+    console.log('DATA:', data);
 
     // intentamos convertir rol a número si viene como string
     if (data.rol !== undefined && data.rol !== null) {
@@ -34,7 +36,7 @@ export class DriversGrpcController {
 
     const created = await this.conductoresService.create(createData);
 
-    return {
+    const response = {
       uuid: created.id_usuario,
       email: created.email,
       name: created.nombre,
@@ -43,5 +45,8 @@ export class DriversGrpcController {
       rol: String(created.id_rol ?? ''),
       message: 'Driver created',
     };
+
+    console.log('gRPC CreateDriver response:', response);
+    return response;
   }
 }
