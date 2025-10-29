@@ -20,29 +20,19 @@ services:
       retries: 5
 
   app:
-    image: node:20
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: conductores_app
     restart: unless-stopped
-    working_dir: /usr/src/app
     env_file:
       - .env
-    volumes:
-      - ./:/usr/src/app   # carpeta de tu proyecto NestJS
-      - /usr/src/app/node_modules
-    ports:
-     # - "3001:3000" # expose on 3001 to avoid colliding with other apps
-      - "50052:50052"
     depends_on:
       db:
         condition: service_healthy
-    command: >
-      sh -c "
-        npm install &&
-        npx prisma generate &&
-        npx prisma migrate deploy &&
-        npx prisma db seed &&
-        npm run start:dev
-      "
+    ports:
+      - "3001:3000"
+      - "50052:50052"
 
 volumes:
   db_data:
